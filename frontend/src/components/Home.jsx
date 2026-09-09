@@ -2,12 +2,14 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FiPlus, FiSearch, FiEye, FiEdit2, FiCopy, FiTrash2, FiChevronDown, FiChevronUp, FiFileText } from 'react-icons/fi';
 import {
+  createExhibition,
   listExhibitions,
   getLiveExhibitions,
   deleteExhibition,
   duplicateExhibition
 } from '../services/api';
 import countries from '../countries.json';
+import timezones from '../timezones.json';
 
 const parseTimezoneOffsetMinutes = (timezone) => {
   const match = /^UTC([+-])(\d{2}):(\d{2})$/.exec(timezone || '');
@@ -38,7 +40,52 @@ const formatInTimezone = (date, timezone) => {
   });
 };
 
-export default function Home({ activeExhibition, handleOpenCreate }) {
+const CREATE_FIELDS = [
+  { name: 'name', label: 'Exhibition Name', required: true, full: true },
+  { name: 'startTime', label: 'Start Time', type: 'datetime-local', required: true },
+  { name: 'endTime', label: 'End Time', type: 'datetime-local', required: true },
+  {
+    name: 'timezone',
+    label: 'Timezone',
+    required: true,
+    options: timezones.map((tz) => ({ value: tz.value, label: tz.label })),
+  },
+  {
+    name: 'country',
+    label: 'Country',
+    required: true,
+    options: countries.map((c) => ({ value: c.name, label: `${c.flag} ${c.name}` })),
+  },
+  {
+    name: 'locationType',
+    label: 'Location Type',
+    options: [
+      { value: 'DOMESTIC', label: 'Domestic' },
+      { value: 'INTERNATIONAL', label: 'International' },
+    ],
+  },
+  { name: 'venue', label: 'Venue' },
+  { name: 'organizationDetails', label: 'Organization Details', full: true },
+  { name: 'organizerContactPerson', label: 'Organizer Contact Person' },
+  { name: 'organizerMobile', label: 'Organizer Mobile', type: 'tel' },
+  { name: 'organizerEmail', label: 'Organizer Email', type: 'email', full: true },
+];
+
+const EMPTY_EXHIBITION = {
+  name: '',
+  startTime: '',
+  endTime: '',
+  timezone: 'UTC+00:00',
+  country: '',
+  locationType: '',
+  venue: '',
+  organizationDetails: '',
+  organizerContactPerson: '',
+  organizerEmail: '',
+  organizerMobile: '',
+};
+
+export default function Home() {
   const navigate = useNavigate();
   const [exhibitions, setExhibitions] = useState([]);
   const [live, setLive] = useState([]);
@@ -49,6 +96,8 @@ export default function Home({ activeExhibition, handleOpenCreate }) {
   const [expandedCard, setExpandedCard] = useState(null);
   const [deleteConfirm, setDeleteConfirm] = useState(null);
   const [message, setMessage] = useState({ type: '', text: '' });
+  const [createForm, setCreateForm] = useState(null);
+  const [saving, setSaving] = useState(false);
 
   const loadExhibitions = async () => {
     try {
@@ -135,6 +184,27 @@ export default function Home({ activeExhibition, handleOpenCreate }) {
     }
   };
 
+  const handleCreate = async (e) => {
+    e.preventDefault();
+    if (new Date(createForm.endTime) <= new Date(createForm.startTime)) {
+      setMessage({ type: 'error', text: 'End time must be after start time' });
+      return;
+    }
+    setSaving(true);
+    try {
+      await createExhibition(createForm);
+      setCreateForm(null);
+      setMessage({ type: 'success', text: 'Exhibition created successfully' });
+      await loadExhibitions();
+      setTimeout(() => setMessage({ type: '', text: '' }), 3000);
+    } catch (err) {
+      setMessage({ type: 'error', text: err.message || 'Failed to create exhibition' });
+      setTimeout(() => setMessage({ type: '', text: '' }), 5000);
+    } finally {
+      setSaving(false);
+    }
+  };
+
   const handleDuplicate = async (ex) => {
     try {
       await duplicateExhibition(ex._id);
@@ -209,7 +279,7 @@ export default function Home({ activeExhibition, handleOpenCreate }) {
         {/* Create Button */}
         <div className="mb-6">
           <button
-            onClick={handleOpenCreate}
+            onClick={() => setCreateForm(EMPTY_EXHIBITION)}
             className="w-full px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition flex items-center justify-center gap-2"
           >
             <FiPlus size={20} />
@@ -483,6 +553,66 @@ export default function Home({ activeExhibition, handleOpenCreate }) {
         {/* Spacer for mobile bottom nav */}
         <div className="h-24 lg:h-0"></div>
       </div>
+
+      {/* Create Exhibition Modal */}
+      {createForm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <form
+            onSubmit={handleCreate}
+            className="bg-white rounded-2xl p-6 w-full max-w-lg shadow-xl max-h-[90vh] overflow-y-auto"
+          >
+            <h2 className="text-xl font-bold text-gray-900 mb-4">Create Exhibition</h2>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {CREATE_FIELDS.map(({ name, label, type, required, options, full }) => (
+                <label key={name} className={full ? 'sm:col-span-2' : ''}>
+                  <span className="block text-sm font-semibold text-gray-700 mb-1">
+                    {label}{required && <span className="text-red-600"> *</span>}
+                  </span>
+                  {options ? (
+                    <select
+                      required={required}
+                      value={createForm[name]}
+                      onChange={(e) => setCreateForm({ ...createForm, [name]: e.target.value })}
+                      className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:outline-none focus:border-blue-500 bg-white"
+                    >
+                      <option value="">Select…</option>
+                      {options.map((o) => (
+                        <option key={o.value} value={o.value}>{o.label}</option>
+                      ))}
+                    </select>
+                  ) : (
+                    <input
+                      type={type || 'text'}
+                      required={required}
+                      value={createForm[name]}
+                      onChange={(e) => setCreateForm({ ...createForm, [name]: e.target.value })}
+                      className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:outline-none focus:border-blue-500"
+                    />
+                  )}
+                </label>
+              ))}
+            </div>
+
+            <div className="flex gap-3 mt-6">
+              <button
+                type="submit"
+                disabled={saving}
+                className="flex-1 px-4 py-3 bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white font-semibold rounded-lg transition"
+              >
+                {saving ? 'Creating…' : 'Create'}
+              </button>
+              <button
+                type="button"
+                onClick={() => setCreateForm(null)}
+                className="flex-1 px-4 py-3 bg-gray-200 hover:bg-gray-300 text-gray-900 font-semibold rounded-lg transition"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
 
       {/* Delete Confirmation Modal */}
       {deleteConfirm && (
