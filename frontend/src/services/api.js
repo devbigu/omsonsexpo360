@@ -21,13 +21,33 @@ const getBackendBase = () => {
     return 'http://localhost:5000';
   }
 
-  const productionUrl = 'https://omsonsexpo360.com/';
+  const productionUrl = 'https://omsonsexpo360.com';
   console.log('🔗 Using production default:', productionUrl);
   return productionUrl;
 };
 
 const BACKEND_BASE = getBackendBase();
 console.log('🔗 Backend URL:', BACKEND_BASE);
+
+// The API returns media as backend-relative paths ('/uploads/x.jpg',
+// '/api/cards/image-proxy?...'). The browser would resolve those against the
+// frontend origin, so every card image 404s whenever the two are not on the
+// same host. Resolve them against the backend as the data comes in.
+const toMediaUrl = (v) =>
+  typeof v === 'string' && v.startsWith('/') ? `${BACKEND_BASE}${v}` : v;
+
+const withMediaUrls = (payload) => {
+  if (!payload?.data) return payload;
+  const cards = Array.isArray(payload.data) ? payload.data : [payload.data];
+  const fixed = cards.map((card) => ({
+    ...card,
+    images: Array.isArray(card.images) ? card.images.map(toMediaUrl) : card.images,
+    image: toMediaUrl(card.image),
+    capturedImage: toMediaUrl(card.capturedImage),
+    audio: toMediaUrl(card.audio),
+  }));
+  return { ...payload, data: Array.isArray(payload.data) ? fixed : fixed[0] };
+};
 
 // Helper to get auth header
 const getAuthHeaders = (contentType = 'application/json') => {
@@ -110,7 +130,7 @@ export async function getCards() {
     const txt = await res.text();
     throw new Error(`Fetch error ${res.status}: ${txt}`);
   }
-  return res.json();
+  return withMediaUrls(await res.json());
 }
 
 export async function getCardsForExhibition(exhibitionId) {
@@ -122,7 +142,7 @@ export async function getCardsForExhibition(exhibitionId) {
     const txt = await res.text();
     throw new Error(`Fetch error ${res.status}: ${txt}`);
   }
-  return res.json();
+  return withMediaUrls(await res.json());
 }
 
 export async function createExhibition({

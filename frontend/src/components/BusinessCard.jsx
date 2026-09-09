@@ -200,12 +200,12 @@ export default function BusinessCard({ activeExhibition }) {
   return (
     <div className="card-page">
       {activeExhibition ? (
-        <div style={{ marginBottom: 12, wordWrap: 'break-word', maxWidth: '100%' }}>
+        <div className="msg info">
           <strong>Active Exhibition:</strong> {activeExhibition.name} (Date: {new Date(activeExhibition.startTime).toLocaleDateString()})
         </div>
       ) : (
-        <div style={{ marginBottom: 12, wordWrap: 'break-word', maxWidth: '100%' }}>
-          <em>No active exhibition selected. Save will create a standalone card.</em>
+        <div className="msg">
+          No active exhibition selected. Save will create a standalone card.
         </div>
       )}
       {message.text && (
@@ -419,7 +419,7 @@ export default function BusinessCard({ activeExhibition }) {
 
         <div className="row">
           <label className="label">Interested Products</label>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '100%', maxWidth: '100%' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '8px', width: '100%', maxWidth: '100%' }}>
             {INTERESTED_PRODUCTS_OPTIONS.map(product => (
               <label key={product.value} style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', wordWrap: 'break-word' }}>
                 <input
@@ -428,7 +428,7 @@ export default function BusinessCard({ activeExhibition }) {
                   onChange={() => handleProductToggle(product.value)}
                   style={{ width: '18px', height: '18px', cursor: 'pointer', flexShrink: 0, color: '#364A63' }}
                 />
-                <span style={{ wordWrap: 'break-word', overflowWrap: 'break-word', color: '#364a63', fontSize: '9px' }}>{product.label}</span>
+                <span style={{ wordWrap: 'break-word', overflowWrap: 'break-word', fontSize: '.875rem' }}>{product.label}</span>
               </label>
             ))}
           </div>

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { FiPlus, FiSearch, FiEye, FiEdit2, FiCopy, FiTrash2, FiChevronDown, FiChevronUp, FiFileText } from 'react-icons/fi';
 import {
   createExhibition,
+  updateExhibition,
   listExhibitions,
   getLiveExhibitions,
   deleteExhibition,
@@ -85,7 +86,14 @@ const EMPTY_EXHIBITION = {
   organizerMobile: '',
 };
 
-export default function Home() {
+const toLocalInput = (d) => {
+  if (!d) return '';
+  const x = new Date(d);
+  x.setMinutes(x.getMinutes() - x.getTimezoneOffset());
+  return x.toISOString().slice(0, 16);
+};
+
+export default function Home({ setActiveExhibition }) {
   const navigate = useNavigate();
   const [exhibitions, setExhibitions] = useState([]);
   const [live, setLive] = useState([]);
@@ -98,6 +106,7 @@ export default function Home() {
   const [message, setMessage] = useState({ type: '', text: '' });
   const [createForm, setCreateForm] = useState(null);
   const [saving, setSaving] = useState(false);
+  const [editId, setEditId] = useState(null);
 
   const loadExhibitions = async () => {
     try {
@@ -192,17 +201,39 @@ export default function Home() {
     }
     setSaving(true);
     try {
-      await createExhibition(createForm);
+      if (editId) {
+        await updateExhibition(editId, createForm);
+      } else {
+        await createExhibition(createForm);
+      }
       setCreateForm(null);
-      setMessage({ type: 'success', text: 'Exhibition created successfully' });
+      setEditId(null);
+      setMessage({ type: 'success', text: editId ? 'Exhibition updated successfully' : 'Exhibition created successfully' });
       await loadExhibitions();
       setTimeout(() => setMessage({ type: '', text: '' }), 3000);
     } catch (err) {
-      setMessage({ type: 'error', text: err.message || 'Failed to create exhibition' });
+      setMessage({ type: 'error', text: err.message || 'Failed to save exhibition' });
       setTimeout(() => setMessage({ type: '', text: '' }), 5000);
     } finally {
       setSaving(false);
     }
+  };
+
+  // The eye button is how an exhibition becomes the active one; every other
+  // screen (scan, dashboard, header) keys off activeExhibition.
+  const handleOpen = (ex) => {
+    setActiveExhibition({ ...ex, isLive: live.some((l) => l._id === ex._id) });
+    navigate('/dashboard');
+  };
+
+  const handleEdit = (ex) => {
+    setEditId(ex._id);
+    setCreateForm({
+      ...EMPTY_EXHIBITION,
+      ...Object.fromEntries(Object.keys(EMPTY_EXHIBITION).map((k) => [k, ex[k] ?? ''])),
+      startTime: toLocalInput(ex.startTime),
+      endTime: toLocalInput(ex.endTime),
+    });
   };
 
   const handleDuplicate = async (ex) => {
@@ -279,7 +310,7 @@ export default function Home() {
         {/* Create Button */}
         <div className="mb-6">
           <button
-            onClick={() => setCreateForm(EMPTY_EXHIBITION)}
+            onClick={() => { setEditId(null); setCreateForm(EMPTY_EXHIBITION); }}
             className="w-full px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition flex items-center justify-center gap-2"
           >
             <FiPlus size={20} />
@@ -500,9 +531,9 @@ export default function Home() {
                     <div className="grid grid-cols-5 gap-3">
                       {/* View */}
                       <button
-                        onClick={() => navigate(`/exhibition/${ex._id}`)}
+                        onClick={() => handleOpen(ex)}
                         className="p-3 bg-white text-blue-600 rounded-lg hover:bg-gray-100 transition flex items-center justify-center"
-                        title="View"
+                        title="View cards"
                       >
                         <FiEye size={20} />
                       </button>
@@ -518,7 +549,7 @@ export default function Home() {
 
                       {/* Edit */}
                       <button
-                        onClick={() => navigate(`/exhibition/${ex._id}`)}
+                        onClick={() => handleEdit(ex)}
                         className="p-3 bg-white text-blue-600 rounded-lg hover:bg-gray-100 transition flex items-center justify-center"
                         title="Edit"
                       >
@@ -561,7 +592,7 @@ export default function Home() {
             onSubmit={handleCreate}
             className="bg-white rounded-2xl p-6 w-full max-w-lg shadow-xl max-h-[90vh] overflow-y-auto"
           >
-            <h2 className="text-xl font-bold text-gray-900 mb-4">Create Exhibition</h2>
+            <h2 className="text-xl font-bold text-gray-900 mb-4">{editId ? 'Edit Exhibition' : 'Create Exhibition'}</h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {CREATE_FIELDS.map(({ name, label, type, required, options, full }) => (
@@ -600,11 +631,11 @@ export default function Home() {
                 disabled={saving}
                 className="flex-1 px-4 py-3 bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white font-semibold rounded-lg transition"
               >
-                {saving ? 'Creating…' : 'Create'}
+                {saving ? 'Saving…' : editId ? 'Save Changes' : 'Create'}
               </button>
               <button
                 type="button"
-                onClick={() => setCreateForm(null)}
+                onClick={() => { setCreateForm(null); setEditId(null); }}
                 className="flex-1 px-4 py-3 bg-gray-200 hover:bg-gray-300 text-gray-900 font-semibold rounded-lg transition"
               >
                 Cancel
