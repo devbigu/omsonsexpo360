@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Routes, Route, useNavigate, useLocation, Link } from "react-router-dom";
+import { Routes, Route, Navigate, useNavigate, useLocation, Link } from "react-router-dom";
 
 import Home from "./components/Home";
 import Dashboard from "./components/Dashboard";
@@ -192,6 +192,8 @@ export default function App() {
               </PrivateRoute>
             }
           />
+
+          <Route path="*" element={<Navigate to="/" replace />} />
 
         </Routes>
       </main>
