@@ -18,3 +18,9 @@ if (rootElement) {
   console.error("Root element with id 'root' not found.");
 }
 
+
+if ('serviceWorker' in navigator && import.meta.env.PROD) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch((err) => console.error('SW registration failed', err));
+  });
+}
