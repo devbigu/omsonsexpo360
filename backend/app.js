@@ -33,16 +33,8 @@ app.use(compression());
 app.set("trust proxy", true);
 
 // ---------------- Mongoose Connection ----------------
-// Connect to database - handle errors gracefully
-connectDB().catch((err) => {
-  console.error('Failed to connect to MongoDB:', err);
-  // Don't exit in production - let the server start and retry
-  if (process.env.NODE_ENV === 'production') {
-    console.error('Server will continue but database operations may fail');
-  } else {
-    process.exit(1);
-  }
-});
+// Connected in start() below, before the server accepts traffic, so requests
+// can't hit Mongoose's query buffer while the connection is still opening.
 
 // ---------------- Middleware ----------------
 const isProduction = process.env.NODE_ENV === 'production';
@@ -213,9 +205,25 @@ process.on('uncaughtException', (err) => {
   process.exit(1);
 });
 
-app.listen(PORT, "0.0.0.0", () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`MongoDB URI: ${process.env.MONGO_URI ? 'Set' : 'Not set'}`);
-  console.log(`Frontend URL: ${process.env.FRONTEND_URL || 'Not set'}`);
-});
+const start = async () => {
+  try {
+    await connectDB();
+  } catch (err) {
+    console.error('Failed to connect to MongoDB:', err);
+    // Don't exit in production - let the server start and retry
+    if (process.env.NODE_ENV === 'production') {
+      console.error('Server will continue but database operations may fail');
+    } else {
+      process.exit(1);
+    }
+  }
+
+  app.listen(PORT, "0.0.0.0", () => {
+    console.log(`🚀 Server running on port ${PORT}`);
+    console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`MongoDB URI: ${process.env.MONGO_URI ? 'Set' : 'Not set'}`);
+    console.log(`Frontend URL: ${process.env.FRONTEND_URL || 'Not set'}`);
+  });
+};
+
+start();

@@ -74,22 +74,16 @@ const cardFilter = (req, file, cb) => {
   }
 };
 
-// File size limits based on type
-const getFileSizeLimit = (file) => {
-  if (file.mimetype === 'application/pdf') {
-    return 10 * 1024 * 1024; // 10MB for PDFs
-  } else if (file.mimetype.startsWith('image/')) {
-    return 5 * 1024 * 1024; // 5MB for images
-  }
-  return 10 * 1024 * 1024; // Default 10MB
-};
+// multer/busboy needs a number here - a function is silently ignored, which
+// means no limit at all. Per-mimetype caps would need a fileFilter.
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
 // General multer configuration
 export const generalUpload = multer({
   storage,
   fileFilter: generalFileFilter,
   limits: {
-    fileSize: getFileSizeLimit,
+    fileSize: MAX_FILE_SIZE,
     files: 10
   }
 });
@@ -99,7 +93,7 @@ export const strictUpload = multer({
   storage,
   fileFilter: strictFileFilter,
   limits: {
-    fileSize: getFileSizeLimit,
+    fileSize: MAX_FILE_SIZE,
     files: 10
   }
 });
@@ -109,7 +103,7 @@ export const imageUpload = multer({
   storage,
   fileFilter: imageFilter,
   limits: {
-    fileSize: (file) => 5 * 1024 * 1024, // 5MB for images
+    fileSize: 5 * 1024 * 1024, // 5MB for images
     files: 5
   }
 });
@@ -119,7 +113,7 @@ export const exhibitionUpload = multer({
   storage,
   fileFilter: strictFileFilter,
   limits: {
-    fileSize: getFileSizeLimit,
+    fileSize: MAX_FILE_SIZE,
     files: 10
   }
 });
@@ -128,7 +122,7 @@ export const cardUpload = multer({
   storage,
   fileFilter: cardFilter,
   limits: {
-    fileSize: (file) => 10 * 1024 * 1024, // 10MB limit for card data
+    fileSize: MAX_FILE_SIZE,
     files: 6 // 5 images + 1 audio
   }
 });

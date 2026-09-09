@@ -13,8 +13,9 @@ const connectDB = async () => {
     }
     
     await mongoose.connect(mongoUri, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
+      // Force IPv4: dual-stack getaddrinfo stalls ~2.3s per host on some
+      // networks (WSL2), pushing Atlas SRV connect past the 10s query buffer.
+      family: 4,
     });
     winston.info("MongoDB Connected successfully");
     console.log("✅ MongoDB Connected");
