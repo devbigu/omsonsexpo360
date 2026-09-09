@@ -1,0 +1,150 @@
+[
+  {
+    "value": "UTC-12:00",
+    "label": "(UTC-12:00) Baker Island"
+  },
+  {
+    "value": "UTC-11:00",
+    "label": "(UTC-11:00) Alofi, Midway"
+  },
+  {
+    "value": "UTC-10:00",
+    "label": "(UTC-10:00) Adak, Rarotonga, Honolulu, Papeete"
+  },
+  {
+    "value": "UTC-09:00",
+    "label": "(UTC-09:00) Anchorage, Fairbanks, Juneau, Unalaska"
+  },
+  {
+    "value": "UTC-08:00",
+    "label": "(UTC-08:00) Adamstown, Los Angeles, San Francisco, Seattle, Vancouver, Las Vegas"
+  },
+  {
+    "value": "UTC-07:00",
+    "label": "(UTC-07:00) Denver, Edmonton, Salt Lake City, Hermosillo, Inuvik, Calgary, Phoenix, Whitehorse"
+  },
+  {
+    "value": "UTC-06:00",
+    "label": "(UTC-06:00) Regina, Resolute Bay, Managua, San Jose, San Salvador, Galapagos Islands, Mexico City, Baker Lake, Minneapolis, Guatemala City, Belmopan, Houston, New Orleans, Tegucigalpa, Oklahoma City, Kansas City, Chicago, Winnipeg, Dallas"
+  },
+  {
+    "value": "UTC-05:00",
+    "label": "(UTC-05:00) Lima, Detroit, Quito, Alert, Rio Branco, Easter Island *, Eureka, Atlanta, Miami, Grise Fiord, Havana, Nassau, Indianapolis, New York, Bogota, Boston, Toronto, Ottawa, Panama, n, Philadelphia, Kingston, Washington DC, Chibougamau, Pond Inlet, Kuujjuaq, Port-au-Prince, Coral Harbour"
+  },
+  {
+    "value": "UTC-04:00",
+    "label": "(UTC-04:00) Manaus, San Juan, Santo Domingo, Georgetown, Halifax, Hamilton, Happy Valley-Goose Bay, Sucre, Bridgetown, Caracas, Pituffik, La Paz, Port of Spain"
+  },
+  {
+    "value": "UTC-03:30",
+    "label": "(UTC-03:30) Mary's Harbour, John's"
+  },
+  {
+    "value": "UTC-03:00",
+    "label": "(UTC-03:00) Punta Arenas, Rio de Janeiro, Fortaleza, Santiago *, Asuncion, o Paulo, Montevideo, m, Brasilia, Buenos Aires, Paramaribo, Cayenne, rdoba"
+  },
+  {
+    "value": "UTC-02:00",
+    "label": "(UTC-02:00) Qaanaaq, Ittoqqortoormiit, Nuuk, Kangerlussuaq, King Edward Point"
+  },
+  {
+    "value": "UTC-01:00",
+    "label": "(UTC-01:00) Ponta Delgada, Praia"
+  },
+  {
+    "value": "UTC+00:00",
+    "label": "(UTC+00:00) Abidjan, Lisbon, Accra, London, Reykjavik, Douglas, Dublin, Edinburgh, Freetown, Bamako, Monrovia, Banjul, Bissau, Timbuktu, Nouakchott, rshavn, Jamestown, Ouagadougou, Cardiff, Yamoussoukro, Conakry, Dakar, Danmarkshavn"
+  },
+  {
+    "value": "UTC+01:00",
+    "label": "(UTC+01:00) Abuja, Ljubljana, Rabat *, Longyearbyen, Luanda, Algiers, Luxembourg, Madrid, Rome, Amsterdam, Malabo, n *, Frankfurt, Sarajevo, Gibraltar, Skopje, Monaco, Bangui, Barcelona, Stockholm, Belgrade, N'Djamena, Berlin, Bern, Niamey, Tirana, Bratislava, Brazzaville, Tunis, Budapest, Oslo, Valletta, Vatican City, Vienna, Paris, Casablanca *, Warsaw, Kinshasa, Podgorica, Ciudad de la Paz, Copenhagen, Lagos, Porto Novo, Zagreb, Prague, rich, Libreville"
+  },
+  {
+    "value": "UTC+02:00",
+    "label": "(UTC+02:00) Dnipro, Lubumbashi, Lusaka, Riga, Rovaniemi, Maputo, Athens, Maseru, Gaborone, Mbabane, Gitega, Sofia, Harare, Beirut, Helsinki, Tallinn, Nicosia, Tripoli, Bucharest, Johannesburg, Juba, Bujumbura, Kaliningrad, Cairo, Cape Town, Kemi, Khartoum, Vilnius, Kigali, Windhoek, u, Kyiv, Lilongwe, Pretoria"
+  },
+  {
+    "value": "UTC+03:00",
+    "label": "(UTC+03:00) Addis Ababa, Djibouti, Dodoma, Doha, Riyadh, Amman, Ankara, Manama, Antananarivo, Asmara, Sana, Marion Island (Prince Edward Islands), Baghdad, Minsk, Mogadishu, Moroni, Moscow, Nairobi, Belushya Guba, Istanbul, Kampala, Kuwait City, Damascus, Dar es Salaam"
+  },
+  {
+    "value": "UTC+03:30",
+    "label": "(UTC+03:30) Tehran"
+  },
+  {
+    "value": "UTC+04:00",
+    "label": "(UTC+04:00) Abu Dhabi, Dubai, Saint-Denis, Samara, Baku, Muscat, Tbilisi, Izhevsk, Victoria, Port Louis, Yerevan"
+  },
+  {
+    "value": "UTC+04:30",
+    "label": "(UTC+04:30) Kabul"
+  },
+  {
+    "value": "UTC+05:00",
+    "label": "(UTC+05:00) Almaty, Dushanbe, Amsterdam Island, Male, Ashgabat, Astana, Tashkent, Islamabad, Oral, Karachi, Port-aux-Francais, Yekaterinburg, Lahore"
+  },
+  {
+    "value": "UTC+05:30",
+    "label": "(UTC+05:30) Sri Jayawardenepura Kotte, Mumbai, Bengaluru, New Delhi, Chennai, Kolkata"
+  },
+  {
+    "value": "UTC+05:45",
+    "label": "(UTC+05:45) Kathmandu"
+  },
+  {
+    "value": "UTC+06:00",
+    "label": "(UTC+06:00) Dhaka, Diego Garcia, Bishkek, Thimphu, Omsk"
+  },
+  {
+    "value": "UTC+06:30",
+    "label": "(UTC+06:30) Naypyidaw, Yangon"
+  },
+  {
+    "value": "UTC+07:00",
+    "label": "(UTC+07:00) Bangkok, Hanoi, Hovd, Norilsk, Novosibirsk, Jakarta, Vientiane, Khatanga, Phnom Penh, Krasnoyarsk, Pontianak"
+  },
+  {
+    "value": "UTC+08:00",
+    "label": "(UTC+08:00) Denpasar, Makassar, Manila, Shanghai, Singapore, Bandar Seri Begawan, Beijing, Taipei, Hong Kong, Irkutsk, Ulaanbaatar, mqi, Perth, Chongqing, Kuala Lumpur, Lhasa"
+  },
+  {
+    "value": "UTC+08:45",
+    "label": "(UTC+08:45) Eucla"
+  },
+  {
+    "value": "UTC+09:00",
+    "label": "(UTC+09:00) Pyongyang, Dili, Manokwari, Seoul, Ngerulmud, Tiksi, Tokyo, Chita, Yakutsk"
+  },
+  {
+    "value": "UTC+09:30",
+    "label": "(UTC+09:30) Alice Springs, Darwin"
+  },
+  {
+    "value": "UTC+10:00",
+    "label": "(UTC+10:00) a, Brisbane, Cairns, Verkhoyansk, Vladivostok, Komsomolsk-on-Amur, Port Moresby"
+  },
+  {
+    "value": "UTC+10:30",
+    "label": "(UTC+10:30) Adelaide *, Sydney *"
+  },
+  {
+    "value": "UTC+11:00",
+    "label": "(UTC+11:00) Magadan, Melbourne *, Srednekolymsk, Hobart *, Honiara, Palikir, Canberra *, Port Vila, Yuzhno-Sakhalinsk"
+  },
+  {
+    "value": "UTC+12:00",
+    "label": "(UTC+12:00) Majuro, Anadyr, Funafuti, Suva, Tarawa, Petropavlovsk-Kamchatsky, Pevek, Wake Island, Yaren"
+  },
+  {
+    "value": "UTC+13:00",
+    "label": "(UTC+13:00) Apia, Fakaofo, Auckland *, Nuku'alofa, Wellington *"
+  },
+  {
+    "value": "UTC+13:45",
+    "label": "(UTC+13:45) Chatham Islands *"
+  },
+  {
+    "value": "UTC+14:00",
+    "label": "(UTC+14:00) Kiritimati"
+  }
+]

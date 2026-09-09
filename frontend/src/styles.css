@@ -1,0 +1,8 @@
+@import "tailwindcss";
+
+@keyframes tab-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: none; }
+}
+.animate-tab { animation: tab-in 220ms ease-out; }
+@media (prefers-reduced-motion: reduce) { .animate-tab { animation: none; } }
