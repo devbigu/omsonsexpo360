@@ -52,7 +52,8 @@ const allowedOrigins = [
   "https://omsonsexpo360.com",
   "https://www.omsonsexpo360.com",
   "capacitor://localhost",
-  "http://localhost"
+  "http://localhost",
+  "https://omsonsexpo360.vercel.app"
 ];
 
 if (isProduction) {
